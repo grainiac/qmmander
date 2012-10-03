@@ -1,0 +1,626 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FileExplorerView</class>
+ <widget class="QWidget" name="FileExplorerView">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>637</width>
+    <height>386</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <item row="0" column="0">
+      <layout class="QHBoxLayout" name="horizontalLayoutNavigation">
+       <property name="spacing">
+        <number>1</number>
+       </property>
+       <property name="sizeConstraint">
+        <enum>QLayout::SetNoConstraint</enum>
+       </property>
+       <property name="leftMargin">
+        <number>5</number>
+       </property>
+       <item>
+        <widget class="QComboBox" name="comboBox">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>65</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="minimumContentsLength">
+          <number>255</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>2</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="PathLineEdit" name="lineEditPath">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="locale">
+          <locale language="English" country="UnitedStates"/>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButtonFolderUp">
+         <property name="maximumSize">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+           <stylestrategy>PreferAntialias</stylestrategy>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string>Navigate one folder up</string>
+         </property>
+         <property name="text">
+          <string notr="true">..</string>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButtonRoot">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>MS Shell Dlg 2</family>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+           <stylestrategy>PreferAntialias</stylestrategy>
+           <kerning>true</kerning>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string>Navigate to root directory</string>
+         </property>
+         <property name="text">
+          <string notr="true">\</string>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButtonCopyPath">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string>Copy path to clipboard</string>
+         </property>
+         <property name="text">
+          <string notr="true"/>
+         </property>
+         <property name="icon">
+          <iconset resource="Qmmander.qrc">
+           <normaloff>:/images/images/editcopy.png</normaloff>:/images/images/editcopy.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>14</width>
+           <height>14</height>
+          </size>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButtonSwitchViews">
+         <property name="minimumSize">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string>Swap views</string>
+         </property>
+         <property name="text">
+          <string notr="true"/>
+         </property>
+         <property name="icon">
+          <iconset resource="Qmmander.qrc">
+           <normaloff>:/images/images/switchviews.png</normaloff>:/images/images/switchviews.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>14</width>
+           <height>14</height>
+          </size>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="1" column="0">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayoutDrives">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+        </layout>
+       </item>
+       <item>
+        <widget class="QSplitter" name="splitter">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <widget class="QSplitter" name="splitterTrees">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <widget class="QTreeView" name="treeView">
+           <property name="acceptDrops">
+            <bool>true</bool>
+           </property>
+          </widget>
+          <widget class="NetworkTreeWidget" name="networkTree">
+           <property name="editTriggers">
+            <set>QAbstractItemView::NoEditTriggers</set>
+           </property>
+           <attribute name="headerVisible">
+            <bool>false</bool>
+           </attribute>
+           <column>
+            <property name="text">
+             <string notr="true">1</string>
+            </property>
+           </column>
+          </widget>
+         </widget>
+         <widget class="QWidget" name="verticalLayoutWidget">
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="FileListWidget" name="listWidget">
+             <property name="acceptDrops">
+              <bool>true</bool>
+             </property>
+             <property name="editTriggers">
+              <set>QAbstractItemView::NoEditTriggers</set>
+             </property>
+             <property name="tabKeyNavigation">
+              <bool>true</bool>
+             </property>
+             <property name="dragEnabled">
+              <bool>true</bool>
+             </property>
+             <property name="dragDropMode">
+              <enum>QAbstractItemView::DragDrop</enum>
+             </property>
+             <property name="selectionMode">
+              <enum>QAbstractItemView::ExtendedSelection</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="FileTableWidget" name="tableWidget">
+             <property name="mouseTracking">
+              <bool>false</bool>
+             </property>
+             <property name="acceptDrops">
+              <bool>true</bool>
+             </property>
+             <property name="editTriggers">
+              <set>QAbstractItemView::NoEditTriggers</set>
+             </property>
+             <property name="tabKeyNavigation">
+              <bool>false</bool>
+             </property>
+             <property name="dragEnabled">
+              <bool>true</bool>
+             </property>
+             <property name="dragDropOverwriteMode">
+              <bool>false</bool>
+             </property>
+             <property name="dragDropMode">
+              <enum>QAbstractItemView::DragDrop</enum>
+             </property>
+             <property name="selectionMode">
+              <enum>QAbstractItemView::ExtendedSelection</enum>
+             </property>
+             <property name="selectionBehavior">
+              <enum>QAbstractItemView::SelectRows</enum>
+             </property>
+             <property name="showGrid">
+              <bool>false</bool>
+             </property>
+             <property name="cornerButtonEnabled">
+              <bool>false</bool>
+             </property>
+             <attribute name="horizontalHeaderCascadingSectionResizes">
+              <bool>false</bool>
+             </attribute>
+             <attribute name="verticalHeaderVisible">
+              <bool>false</bool>
+             </attribute>
+             <attribute name="verticalHeaderDefaultSectionSize">
+              <number>20</number>
+             </attribute>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PathLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>pathlineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>FileTableWidget</class>
+   <extends>QTableWidget</extends>
+   <header>filetablewidget.h</header>
+   <slots>
+    <signal>filesDropped(QTableWidgetItem*,QList,Qt::DropAction)</signal>
+    <slot>onItemClicked(int,int)</slot>
+    <slot>onItemPressed(QTableWidgetItem*)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>FileListWidget</class>
+   <extends>QListWidget</extends>
+   <header>filelistwidget.h</header>
+   <slots>
+    <signal>filesDropped(QTableWidgetItem*,QList,Qt::DropAction)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>NetworkTreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>networktreewidget.h</header>
+   <slots>
+    <signal>networkShareItemClicked(QTreeWidgetItem*,int)</signal>
+    <slot>networkTreeItemClicked(QTreeWidgetItem*,int)</slot>
+    <slot>networkTreeItemDblClicked(QTreeWidgetItem*,int)</slot>
+   </slots>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="Qmmander.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>tableWidget</sender>
+   <signal>cellDoubleClicked(int,int)</signal>
+   <receiver>FileExplorerView</receiver>
+   <slot>tableItemDblClicked(int,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>149</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>treeView</sender>
+   <signal>clicked(QModelIndex)</signal>
+   <receiver>FileExplorerView</receiver>
+   <slot>treeItemChanged(QModelIndex)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>99</x>
+     <y>149</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tableWidget</sender>
+   <signal>itemSelectionChanged()</signal>
+   <receiver>FileExplorerView</receiver>
+   <slot>tableItemSelectionChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>399</x>
+     <y>143</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>269</x>
+     <y>125</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>listWidget</sender>
+   <signal>itemSelectionChanged()</signal>
+   <receiver>FileExplorerView</receiver>
+   <slot>listItemSelectionChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>518</x>
+     <y>118</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>345</x>
+     <y>201</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>listWidget</sender>
+   <signal>itemDoubleClicked(QListWidgetItem*)</signal>
+   <receiver>FileExplorerView</receiver>
+   <slot>listItemDblClicked(QListWidgetItem*)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>518</x>
+     <y>118</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>345</x>
+     <y>201</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>networkTree</sender>
+   <signal>itemClicked(QTreeWidgetItem*,int)</signal>
+   <receiver>FileExplorerView</receiver>
+   <slot>networkTreeItemChanged(QTreeWidgetItem*,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>277</x>
+     <y>295</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>318</x>
+     <y>192</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>networkTree</sender>
+   <signal>itemClicked(QTreeWidgetItem*,int)</signal>
+   <receiver>networkTree</receiver>
+   <slot>networkTreeItemClicked(QTreeWidgetItem*,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>264</x>
+     <y>295</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>264</x>
+     <y>295</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>networkTree</sender>
+   <signal>itemDoubleClicked(QTreeWidgetItem*,int)</signal>
+   <receiver>networkTree</receiver>
+   <slot>networkTreeItemDblClicked(QTreeWidgetItem*,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>264</x>
+     <y>295</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>264</x>
+     <y>295</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>networkTree</sender>
+   <signal>networkShareItemClicked(QTreeWidgetItem*,int)</signal>
+   <receiver>FileExplorerView</receiver>
+   <slot>networkTreeItemChanged(QTreeWidgetItem*,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>264</x>
+     <y>295</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>318</x>
+     <y>192</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButtonFolderUp</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>FileExplorerView</receiver>
+   <slot>onButtonDirUp(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>624</x>
+     <y>11</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>318</x>
+     <y>192</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButtonRoot</sender>
+   <signal>clicked()</signal>
+   <receiver>FileExplorerView</receiver>
+   <slot>onButtonRootDir()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>603</x>
+     <y>11</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>318</x>
+     <y>192</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButtonCopyPath</sender>
+   <signal>clicked()</signal>
+   <receiver>FileExplorerView</receiver>
+   <slot>onButtonCopyPath2Clipboard()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>582</x>
+     <y>11</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>318</x>
+     <y>192</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <signal>fileExplorerActivated(FileExplorer*)</signal>
+  <signal>historyStateChanged(int,int)</signal>
+  <slot>tableItemDblClicked(int,int)</slot>
+  <slot>tableHeaderClicked(int)</slot>
+  <slot>treeItemChanged(QModelIndex)</slot>
+  <slot>tableItemSelectionChanged()</slot>
+  <slot>listItemSelectionChanged()</slot>
+  <slot>listItemDblClicked(QListWidgetItem*)</slot>
+  <slot>networkTreeItemChanged(QTreeWidgetItem*,int)</slot>
+  <slot>filesWereDroppedIn(QTableWidgetItem*,QList,Qt::DropAction)</slot>
+  <slot>filesWereDroppedIn(QListWidgetItem*,QList,Qt::DropAction)</slot>
+  <slot>historyBackward()</slot>
+  <slot>historyForward()</slot>
+  <slot>driveListChanged()</slot>
+  <slot>fileComboBoxIndexChanged(QString)</slot>
+  <slot>onButtonCopyPath2Clipboard()</slot>
+  <slot>onButtonRootDir()</slot>
+  <slot>onButtonDirUp(bool)</slot>
+ </slots>
+</ui>

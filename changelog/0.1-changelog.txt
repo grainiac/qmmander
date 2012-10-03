@@ -1,0 +1,63 @@
+Changelog for the Qmmander 0.1 development branch
+=================================================
+
+0.1.0-b1-8 12/27/2010
+---------------------
+- NEW: Updated to Qt 4.7.1.
+- NEW: PysicsFS-library updated to v.2.0.1
+- NEW: Tab navigation improved. Previous tab is now available over toolbar icon.
+- NEW: The left and right view now independantly saves the collumn widths so
+       that you don't have to resize the table widget again.
+- NEW: Functionality for changing file attributes and file times added.
+- SCM: Switched from SVN to a fresh Mercurial repository (without SVN history).
+
+0.1.0-a5-7 01/10/2010
+---------------------
+- NEW: Compression functionality added (.zip archives)
+       Qmmander uses Lucian Wischik´s Zip Utils for file compression.
+       [http://www.codeproject.com/KB/files/zip_utils.aspx]
+
+0.1.0-a4-6 12/24/2009
+---------------------
+- NEW: Decompression functionality added for .zip and .7z archives.
+       Qmmander uses Ryan C. Gordon´s PhysicsFS-library [http://icculus.org/physfs/]
+       for browsing in archives and decompression.
+- NEW: Updated to Qt 4.6
+
+0.1.0-a3-5 10/25/2009
+---------------------
+- NEW: A global drive toolbar which interacts with the active explorer view.
+- NEW: A drive-ComboBox in the navigation area of the explorer-views replaces
+       the drive-PushButtons.
+- A lot of bugfixes....
+
+0.1.0-a2-4 10/18/2009
+---------------------
+- NEW: Updated to Qt 4.6 Beta.
+- NEW: Browsing of Windows-Directory-Links (*.lnk) added.
+- NEW: Improved speed of browsing network shares in the network tree.
+- NEW: Connect/Disconnect network drives.
+- NEW: Check for updates can be turned off now.
+
+
+0.1.0-a1-3 10/12/2009
+---------------------
+- NEW: tools-toolbar with link to Desktop, DOS-box and Calculator.
+- NEW: Directory history and navigation buttons in navigation-toolbar.
+- NEW: "New folder" function.
+- NEW: Check project site for new version at startup.
+- Bugfixes, cleaned up the menus.
+
+
+0.1.0-pre-2 10/10/2009
+----------------------
+- NEW: Splashscreen.
+- NEW: Versioning.
+- NEW: Support for browsing NTFS junctions.
+- NEW: Click navigation in path field.
+- Bugfixes.
+
+
+0.1.0-pre-1 released 10/08/2009
+-------------------------------
+- this was the first subversion tagged pre-alpha version of Qmmander!
