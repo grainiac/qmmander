@@ -39,7 +39,7 @@ DeleteCommand::~DeleteCommand()
 void DeleteCommand::execute()
 {
     SHFILEOPSTRUCTW st;
-    st.hwnd=MainWindow::getMainWindow()->winId();
+    st.hwnd = (HWND)MainWindow::getMainWindow()->winId();
     st.wFunc=FO_DELETE;
     st.fFlags=0x4000; // FOF_WANTNUKEWARNING for OS >= Vista
     st.pFrom=files2Delete_;

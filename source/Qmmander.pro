@@ -5,8 +5,12 @@ TARGET = Qmmander
 TEMPLATE = app
 QT = core \
     gui \
+    widgets \
     network \
     xml
+
+DEFINES += NOMINMAX
+
 SOURCES += main.cpp \
     mainwindow.cpp \
     FileExplorer.cpp \

@@ -40,7 +40,7 @@ DeleteToRecycleBinCommand::~DeleteToRecycleBinCommand()
 void DeleteToRecycleBinCommand::execute()
 {
     SHFILEOPSTRUCTW st;
-    st.hwnd=MainWindow::getMainWindow()->winId();
+    st.hwnd=(HWND)MainWindow::getMainWindow()->winId();
     st.wFunc=FO_DELETE;
     st.fFlags=FOF_ALLOWUNDO | ~FOF_NOCONFIRMATION;
     st.pFrom=files2Delete_;

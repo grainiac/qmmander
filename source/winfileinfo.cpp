@@ -1097,7 +1097,7 @@ QImage qt_fromWinHBITMAP(HDC hdc, HBITMAP bitmap, int w, int h)
         return image;
 
     // Get bitmap bits
-    uchar *data = (uchar *) qMalloc(bmi.bmiHeader.biSizeImage);
+    uchar *data = new uchar[bmi.bmiHeader.biSizeImage];
 
     if (GetDIBits(hdc, bitmap, 0, h, data, &bmi, DIB_RGB_COLORS)) {
         // Create image and copy data into image.
@@ -1109,7 +1109,7 @@ QImage qt_fromWinHBITMAP(HDC hdc, HBITMAP bitmap, int w, int h)
     } else {
         qWarning("qt_fromWinHBITMAP(), failed to get bitmap bits");
     }
-    qFree(data);
+    delete [] data;
 
     return image;
 }
@@ -1185,7 +1185,7 @@ QPixmap convertHIconToPixmap( const HICON icon)
 
 
 // needed for MSVC 2010 builds...
-/*#define IO_REPARSE_TAG_RESERVED_ZERO 0
+#define IO_REPARSE_TAG_RESERVED_ZERO 0
 #define IO_REPARSE_TAG_SYMBOLIC_LINK IO_REPARSE_TAG_RESERVED_ZERO
 
 typedef struct _REPARSE_DATA_BUFFER {
@@ -1211,7 +1211,7 @@ typedef struct _REPARSE_DATA_BUFFER {
       UCHAR  DataBuffer[1];
     } GenericReparseBuffer;
   };
-} REPARSE_DATA_BUFFER, *PREPARSE_DATA_BUFFER;*/
+} REPARSE_DATA_BUFFER, *PREPARSE_DATA_BUFFER;
 // END needed for MSVC 2010 builds...
 
 void getLinkTarget(QString fileName, DWORD fileAttributes, QString& target, int& targetType)

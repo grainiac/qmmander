@@ -41,7 +41,7 @@ CopyCommand::~CopyCommand()
 void CopyCommand::execute()
 {
     SHFILEOPSTRUCTW st;
-    st.hwnd   = MainWindow::getMainWindow()->winId();
+    st.hwnd   = (HWND)MainWindow::getMainWindow()->winId();
     st.wFunc  = FO_COPY;
     st.fFlags = 0x00000000;
     st.pFrom  = sourceFiles_;

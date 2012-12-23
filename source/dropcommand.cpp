@@ -73,7 +73,7 @@ DropCommand* DropCommand::dropCommandForActualSelection(QList<QUrl> files, QStri
         }
 
         dc->sourceFiles_ = getSHFileOperationFromString(listFiles);
-        dc->st_.hwnd=MainWindow::getMainWindow()->winId();
+        dc->st_.hwnd=(HWND)MainWindow::getMainWindow()->winId();
 
         if(action==Qt::CopyAction)
         {

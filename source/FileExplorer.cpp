@@ -29,8 +29,8 @@
 #include "mainwindow.h"
 #include <windows.h>
 
-#include <QDirModel>
-#include <QMessageBox>
+#include <QtWidgets/QDirModel>
+#include <QtWidgets/QMessageBox>
 
 FileExplorer::FileExplorer(QWidget *parent)
 :   QWidget(parent),

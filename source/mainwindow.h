@@ -24,9 +24,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QSplashScreen>
-#include <QTableWidgetItem>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QSplashScreen>
+#include <QtWidgets/QTableWidgetItem>
 #include <QEvent>
 #include "winfileinfo.h"
 

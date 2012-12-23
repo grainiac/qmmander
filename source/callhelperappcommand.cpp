@@ -81,7 +81,7 @@ CallHelperAppCommand* CallHelperAppCommand::getFileInformationDialog()
 
 void CallHelperAppCommand::executeWindowsCalculator()
 {
-    ShellExecute(getMainWindow()->winId(), TEXT("open"), TEXT("calc.exe"), TEXT(""), TEXT(""), SW_SHOW);
+    ShellExecute((HWND)getMainWindow()->winId(), TEXT("open"), TEXT("calc.exe"), TEXT(""), TEXT(""), SW_SHOW);
 }
 
 void CallHelperAppCommand::executeDosBox()
@@ -93,12 +93,12 @@ void CallHelperAppCommand::executeDosBox()
 
 void CallHelperAppCommand::executeNetworkDriveConnectDialog()
 {
-    WNetConnectionDialog(getMainWindow()->winId(), RESOURCETYPE_DISK);
+    WNetConnectionDialog((HWND)getMainWindow()->winId(), RESOURCETYPE_DISK);
 }
 
 void CallHelperAppCommand::executeNetworkDriveDisconnectDialog()
 {
-    WNetDisconnectDialog(getMainWindow()->winId(), RESOURCETYPE_DISK);
+    WNetDisconnectDialog((HWND)getMainWindow()->winId(), RESOURCETYPE_DISK);
 }
 
 void CallHelperAppCommand::executeFileInformationDialog()

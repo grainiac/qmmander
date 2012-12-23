@@ -24,8 +24,8 @@
 #ifndef FILETABLEWIDGET_H
 #define FILETABLEWIDGET_H
 
-#include <QTableWidget>
-#include <QWidget>
+#include <QtWidgets/QTableWidget>
+#include <QtWidgets/QWidget>
 #include <QUrl>
 #include "winfileinfo.h"
 

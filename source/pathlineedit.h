@@ -24,7 +24,7 @@
 #ifndef PATHLINEEDIT_H
 #define PATHLINEEDIT_H
 
-#include <QLineEdit>
+#include <QtWidgets/QLineEdit>
 
 class PathLineEdit : public QLineEdit
 {

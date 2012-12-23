@@ -64,7 +64,7 @@ FileExplorerView::FileExplorerView(const FileExplorer& fileExplorer, QWidget *pa
     ui_->tableWidget->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Last modified")));
     ui_->tableWidget->setHorizontalHeaderItem(3, new QTableWidgetItem(tr("Type")));
     ui_->tableWidget->setHorizontalHeaderItem(4, new QTableWidgetItem(tr("Attributes")));
-    ui_->tableWidget->horizontalHeader()->setClickable(true);
+    ui_->tableWidget->horizontalHeader()->setSectionsClickable(true);
     ui_->tableWidget->horizontalHeader()->setSortIndicator(0, Qt::AscendingOrder);
 
     MainWindow::getMainWindow()->setSplashScreenMessage(tr("Loading filesystem model for tree view..."));
@@ -118,7 +118,7 @@ FileExplorerView::FileExplorerView(const FileExplorerView& source)
     ui_->tableWidget->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Last modified")));
     ui_->tableWidget->setHorizontalHeaderItem(3, new QTableWidgetItem(tr("Type")));
     ui_->tableWidget->setHorizontalHeaderItem(4, new QTableWidgetItem(tr("Attributes")));
-    ui_->tableWidget->horizontalHeader()->setClickable(true);
+    ui_->tableWidget->horizontalHeader()->setSectionsClickable(true);
     ui_->tableWidget->horizontalHeader()->setSortIndicator(0, Qt::AscendingOrder);
 
     QAbstractItemModel* pModel=dynamic_cast<QAbstractItemModel*>(const_cast<QFileSystemModel*>(MainWindow::getFileSystemModel()));

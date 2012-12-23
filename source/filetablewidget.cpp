@@ -29,6 +29,7 @@
 #include <QScrollBar>
 #include <QHeaderView>
 #include <QApplication>
+#include <QtWidgets>
 
 #include "mainwindow.h"
 

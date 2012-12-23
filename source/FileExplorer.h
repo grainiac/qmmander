@@ -26,7 +26,7 @@
 #ifndef FILEEXPLORER_H
 #define FILEEXPLORER_H
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 #include "winfileinfo.h"
 
 class FileExplorerView;

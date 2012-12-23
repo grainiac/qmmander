@@ -41,7 +41,7 @@ MoveCommand::~MoveCommand()
 void MoveCommand::execute()
 {
     SHFILEOPSTRUCTW st;
-    st.hwnd   = MainWindow::getMainWindow()->winId();
+    st.hwnd   = (HWND) MainWindow::getMainWindow()->winId();
     st.wFunc  = FO_MOVE;
     st.fFlags = FOF_MULTIDESTFILES | FOF_ALLOWUNDO;
     st.pFrom  = sourceFiles_;

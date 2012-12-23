@@ -21,8 +21,8 @@
 ** along with Qmmander.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include <QtGui/QApplication>
-#include <QSplashScreen>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QSplashScreen>
 #include <QPainter>
 #include <QLocale>
 #include <QTranslator>

@@ -24,6 +24,7 @@
 #include "filelistwidget.h"
 #include <QKeyEvent>
 #include <QFileIconProvider>
+#include <QtGui>
 
 FileListWidget::FileListWidget(QWidget* pParent)
 :   QListWidget(pParent)

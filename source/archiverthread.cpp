@@ -65,7 +65,7 @@ bool ArchiverThread::isTerminationSet() const
 void ArchiverThread::terminateThread()
 {
     this->terminate();
-    emit(finished());
+    //emit(finished());
 }
 
 void ArchiverThread::checkWaitConditions()

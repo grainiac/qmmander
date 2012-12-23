@@ -24,8 +24,8 @@
 #ifndef FILEEXPLORERVIEW_H
 #define FILEEXPLORERVIEW_H
 
-#include <QWidget>
-#include <QTableWidgetItem>
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QTableWidgetItem>
 #include <QUrl>
 #include <windows.h>
 #include "winfileinfo.h"
