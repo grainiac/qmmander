@@ -222,7 +222,7 @@ extern "C" {
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
 #if (defined _MSC_VER)
-#define __EXPORT__ __declspec(dllexport)
+#define __EXPORT__ __declspec(dllimport)
 #elif (__GNUC__ >= 3)
 #define __EXPORT__ __attribute__((visibility("default")))
 #else
