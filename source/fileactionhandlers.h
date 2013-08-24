@@ -2,7 +2,7 @@
 **
 ** This file is part of the Qmmander Filemanager.
 **
-** Copyright (C) Alex Skoruppa 2009-2011
+** Copyright (C) Alex Skoruppa 2009-2013
 ** All rights reserved.
 **
 ** Strategies what to do with a FileAction for Zip und Unzip operations.

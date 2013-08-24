@@ -2,7 +2,7 @@
 **
 ** This file is part of the Qmmander Filemanager.
 **
-** Copyright (C) Alex Skoruppa 2009-2011
+** Copyright (C) Alex Skoruppa 2009-2013
 ** All rights reserved.
 **
 ** Helper functions for Win32 SHFileOperation.

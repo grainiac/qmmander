@@ -2,7 +2,7 @@
 **
 ** This file is part of the Qmmander Filemanager.
 **
-** Copyright (C) Alex Skoruppa 2009-2011
+** Copyright (C) Alex Skoruppa 2009-2013
 ** All rights reserved.
 **
 ** A dialog which allows the user to select a action before the application
