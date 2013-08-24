@@ -124,7 +124,12 @@ LIBS += -lgdi32 \
     -lole32 \
     -lmpr \
     -lshlwapi \
-    -lphysfs \
 # for VS 2010
     -lshell32 \
     -luser32
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../3rd_party/PhysFS_DLL/2.0.3/VC2012_Release/ -lphysfs
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../3rd_party/PhysFS_DLL/2.0.3/VC2012_Debug/ -lphysfs
+
+INCLUDEPATH += $$PWD/../3rd_party/PhysFS_DLL/2.0.3/include
+DEPENDPATH += $$PWD/../3rd_party/PhysFS_DLL/2.0.3/include

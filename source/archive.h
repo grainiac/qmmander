@@ -29,7 +29,7 @@
 #include <QtCore>
 
 class ArchiveInfo;
-class PHYSFS_File;
+struct PHYSFS_File;
 
 class Archive
 {

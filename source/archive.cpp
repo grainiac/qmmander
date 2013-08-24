@@ -23,7 +23,7 @@
 ****************************************************************************/
 #include "archive.h"
 #include "archiveinfo.h"
-#include "PhysFS/physfs.h"
+#include <physfs.h>
 #include "ziputils.h"
 
 void qDebugPhysicsFS(QString physFSFunctionWhereErrorOccured, QString errorMsg);
