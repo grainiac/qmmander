@@ -43,19 +43,19 @@ void UpdateQmmanderCommand::execute()
 
 QUrl UpdateQmmanderCommand::getUpdateUrl()
 {
-    QSettings settings("ASKsoft", "Qmmander");
+    QSettings settings("qmmander_settings.ini", QSettings::IniFormat);
     return settings.value("update_server", QUrl("http://qmmander.googlecode.com/files/QmmanderUpdate.xml")).toUrl();
 }
 
 void UpdateQmmanderCommand::setSettingsCheck4Update(bool value)
 {
-    QSettings settings("ASKsoft", "Qmmander");
+    QSettings settings("qmmander_settings.ini", QSettings::IniFormat);
     settings.setValue("check_4_updates", value);
 }
 
 bool UpdateQmmanderCommand::getSettingsCheck4Update()
 {    
-    QSettings settings("ASKsoft", "Qmmander");
+    QSettings settings("qmmander_settings.ini", QSettings::IniFormat);
     return settings.value("check_4_updates", true).toBool();
 }
 

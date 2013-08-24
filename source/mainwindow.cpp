@@ -731,7 +731,7 @@ bool MainWindow::isLeftExplorer(const FileExplorer* const explorer) const
 
 void MainWindow::readSettings()
 {
-    QSettings settings("ASKsoft", "Qmmander");
+    QSettings settings("qmmander_settings.ini", QSettings::IniFormat);
 
     restoreGeometry(settings.value("geometry", QByteArray()).toByteArray());
     restoreState(settings.value("layout", QByteArray()).toByteArray());
@@ -773,7 +773,7 @@ void MainWindow::readSettings()
 
 void MainWindow::writeSettings()
 {
-    QSettings settings("ASKsoft", "Qmmander");
+    QSettings settings("qmmander_settings.ini", QSettings::IniFormat);
 
     settings.setValue("geometry", saveGeometry());
     settings.setValue("layout", saveState());
@@ -793,7 +793,6 @@ void MainWindow::writeSettings()
     settings.setValue("tb_drives_pos", ui_->drivesToolBar->pos());
 
     // save the update server url
-    settings.setValue("check_4_updates", check4Updates_);
     settings.setValue("update_server", QUrl("http://qmmander.googlecode.com/files/QmmanderUpdate.xml"));
 }
 

@@ -80,7 +80,7 @@ void FileTableWidget::saveCollumnWidth(int collumn, int width)
         else
             registryKey="right_explorer/collumn_width_";
 
-        QSettings settings("ASKSoft", "Qmmander");
+        QSettings settings("qmmander_settings.ini", QSettings::IniFormat);
         int oldWidth=settings.value(QString("%1%2").arg(registryKey).arg(collumn), 75).toInt();
 
         if(width!=oldWidth)
@@ -99,8 +99,8 @@ int FileTableWidget::getCollumnWidth(int collumn)
         else
             registryKey="right_explorer/collumn_width_";
 
-        QSettings settings("ASKSoft", "Qmmander");
-        return settings.value(QString("%1%2").arg(registryKey).arg(collumn), 75).toInt();
+            QSettings settings("qmmander_settings.ini", QSettings::IniFormat);
+            return settings.value(QString("%1%2").arg(registryKey).arg(collumn), 75).toInt();
     }
     return 75;
 }
