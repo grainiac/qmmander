@@ -31,7 +31,7 @@
 
 #define VERSION_STRING "0.1.0-b2-9\0"
 
-#define COPYRIGHT_STRING "Copyright © 2009-2011 Alex Skoruppa"
+#define COPYRIGHT_STRING "Copyright © 2009-2013 Alex Skoruppa"
 
 // Version string format:
 // ======================
