@@ -29,6 +29,7 @@
 #include <QString>
 #include <QMessageBox>
 #include "mainwindow.h"
+#include "internals.h"
 #include "FileExplorer.h"
 
 NewFolderCommand::NewFolderCommand()
@@ -37,9 +38,9 @@ NewFolderCommand::NewFolderCommand()
 
 void NewFolderCommand::execute()
 {
-   MainWindow* mainWindow=const_cast<MainWindow*>(MainWindow::getMainWindow());
+   MainWindow& mainWindow = qmndr::Internals::instance().mainWindow();
    bool ok;
-   QString folderName = QInputDialog::getText(mainWindow,
+   QString folderName = QInputDialog::getText(&mainWindow,
                                               QObject::tr("Create new folder"),
                                               QObject::tr("Folder:"),
                                               QLineEdit::Normal,
@@ -47,13 +48,13 @@ void NewFolderCommand::execute()
                                               &ok);
    if(ok && !folderName.isEmpty())
    {
-       FileExplorer* explorer=const_cast<FileExplorer*>(mainWindow->getActiveExplorer());
-       QString newFolder=explorer->getSelectedPath()+"\\"+folderName;
+       const FileExplorer* explorer = mainWindow.getActiveExplorer();
+       QString newFolder = explorer->getSelectedPath()+"\\"+folderName;
        QDir dir;
        if(dir.mkdir(newFolder))
            explorer->refresh();
        else
-           QMessageBox::information(mainWindow,
+           QMessageBox::information(&mainWindow,
                                     QObject::tr("Error"),
                                     QObject::tr("Couldn't create folder %1!").arg(newFolder));
    }

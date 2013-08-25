@@ -26,6 +26,7 @@
 #include "FileExplorer.h"
 #include "updatedialog.h"
 #include "version.h"
+#include "internals.h"
 #include <QSettings>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
@@ -37,25 +38,26 @@ UpdateQmmanderCommand::~UpdateQmmanderCommand()
 
 void UpdateQmmanderCommand::execute()
 {
-    connect(&MainWindow::getNetworkAccessManager(), SIGNAL(finished(QNetworkReply*)), this, SLOT(check4Updates(QNetworkReply*)));
-    MainWindow::getNetworkAccessManager().get(QNetworkRequest(getUpdateUrl()));
+    QNetworkAccessManager& networkAccessManager = qmndr::Internals::instance().networkAccessManager();
+    connect(&networkAccessManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(check4Updates(QNetworkReply*)));
+    networkAccessManager.get(QNetworkRequest(getUpdateUrl()));
 }
 
 QUrl UpdateQmmanderCommand::getUpdateUrl()
 {
-    QSettings settings("qmmander_settings.ini", QSettings::IniFormat);
+    QSettings& settings = qmndr::Internals::instance().settings();
     return settings.value("update_server", QUrl("http://qmmander.googlecode.com/files/QmmanderUpdate.xml")).toUrl();
 }
 
 void UpdateQmmanderCommand::setSettingsCheck4Update(bool value)
 {
-    QSettings settings("qmmander_settings.ini", QSettings::IniFormat);
+    QSettings& settings = qmndr::Internals::instance().settings();
     settings.setValue("check_4_updates", value);
 }
 
 bool UpdateQmmanderCommand::getSettingsCheck4Update()
 {    
-    QSettings settings("qmmander_settings.ini", QSettings::IniFormat);
+    QSettings& settings = qmndr::Internals::instance().settings();
     return settings.value("check_4_updates", true).toBool();
 }
 
@@ -75,7 +77,6 @@ void UpdateQmmanderCommand::check4Updates(QNetworkReply* reply)
 
 void UpdateQmmanderCommand::processResult(QIODevice *source)
 {
-    MainWindow* mainWindow=const_cast<MainWindow*>(MainWindow::getMainWindow());
     QString version;
     QString downloadUrl;
     QXmlStreamReader reader( source );
@@ -105,7 +106,7 @@ void UpdateQmmanderCommand::processResult(QIODevice *source)
         }
     }
 
-    UpdateDialog dlg(getSettingsCheck4Update(), mainWindow);
+    UpdateDialog dlg(getSettingsCheck4Update(), &qmndr::Internals::instance().mainWindow());
     if(version==QString(VERSION_STRING))
     {
         QString strText =QString("<html><body><table style=""text-align: left; width: 100%;"" border=""0"" cellspacing=""10""><tbody>")+

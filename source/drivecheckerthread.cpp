@@ -24,6 +24,7 @@
 #include "drivecheckerthread.h"
 #include "winfileinfo.h"
 #include "mainwindow.h"
+#include "internals.h"
 
 DriveCheckerThread::DriveCheckerThread(QObject* pParent)
 :   QThread(pParent)
@@ -34,8 +35,8 @@ void DriveCheckerThread::run()
 {
     forever
     {
-        int iAppDriveCount=MainWindow::getMainWindow()->getDriveCount();
-        while(WinFileInfo::getDriveList().count()==iAppDriveCount)
+        int appDriveCount = qmndr::Internals::instance().mainWindow().getDriveCount();
+        while(WinFileInfo::getDriveList().count() == appDriveCount)
         {
             //qDebug(QString("DriveCheckerThread: Drive count hasn't changed. Wait 3 seconds....").toStdString().c_str());
             usleep(3000000); // sleep for 3 seconds

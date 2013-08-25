@@ -23,6 +23,7 @@
 ****************************************************************************/
 #include "dropcommand.h"
 #include "mainwindow.h"
+#include "internals.h"
 #include "FileExplorer.h"
 #include "shfileoperations.h"
 #include <QObject>
@@ -45,18 +46,18 @@ DropCommand::~DropCommand()
 void DropCommand::execute()
 {
     ::SHFileOperationW(&st_);
-    MainWindow::getMainWindow()->getActiveExplorer()->refresh();
-    MainWindow::getMainWindow()->getInactiveExplorer()->refresh();
+    qmndr::Internals::instance().mainWindow().getActiveExplorer()->refresh();
+    qmndr::Internals::instance().mainWindow().getInactiveExplorer()->refresh();
 }
 
 DropCommand* DropCommand::dropCommandForActualSelection(QList<QUrl> files, QString to, Qt::DropAction action)
 {
-    MainWindow* mainWindow=const_cast<MainWindow*>(MainWindow::getMainWindow());
+    MainWindow& mainWindow = qmndr::Internals::instance().mainWindow();
     DropCommand* dc=new DropCommand();
 
     QString dialogTitle   = (action==Qt::CopyAction) ? QObject::tr("Copy files?") : QObject::tr("Move files?");
     QString dialogMessage = (action==Qt::CopyAction) ? QObject::tr("Files will be copied to %1.").arg(to) : QObject::tr("Files will be moved to %1.").arg(to);
-    int result = QMessageBox::question(mainWindow, dialogTitle, dialogMessage, QMessageBox::Ok | QMessageBox::Cancel);
+    int result = QMessageBox::question(&mainWindow, dialogTitle, dialogMessage, QMessageBox::Ok | QMessageBox::Cancel);
 
     if(result==QMessageBox::Ok)
     {
@@ -73,7 +74,7 @@ DropCommand* DropCommand::dropCommandForActualSelection(QList<QUrl> files, QStri
         }
 
         dc->sourceFiles_ = getSHFileOperationFromString(listFiles);
-        dc->st_.hwnd=(HWND)MainWindow::getMainWindow()->winId();
+        dc->st_.hwnd=(HWND)mainWindow.winId();
 
         if(action==Qt::CopyAction)
         {

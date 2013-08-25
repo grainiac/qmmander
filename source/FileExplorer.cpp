@@ -27,6 +27,7 @@
 #include "ui_FileExplorer.h"
 #include "FileExplorerView.h"
 #include "mainwindow.h"
+#include "internals.h"
 #include <windows.h>
 
 #include <QtWidgets/QDirModel>
@@ -44,7 +45,7 @@ FileExplorer::FileExplorer(QWidget *parent)
     ui_->tabWidgetFiles->addTab(view, "C:");
 
     // Notify the MainWindow when the active explorer has changed
-    connect(this, SIGNAL(fileExplorerActivated(FileExplorer*)), MainWindow::getMainWindow(), SLOT(activeExplorerChanged(FileExplorer*)));
+    connect(this, SIGNAL(fileExplorerActivated(FileExplorer*)), &qmndr::Internals::instance().mainWindow(), SLOT(activeExplorerChanged(FileExplorer*)));
 
     // Connect TabWidget with the FileExplorer to get notified when the tab index has changed
     connect(ui_->tabWidgetFiles, SIGNAL(currentChanged(int)), this, SLOT(currentTabIndexChanged(int)));
@@ -53,7 +54,7 @@ FileExplorer::FileExplorer(QWidget *parent)
     connect(ui_->lineEditQuickFilter, SIGNAL(textChanged(QString)), this, SLOT(onQuickFilterTextChanged(QString)));
     connect(ui_->pushButtonQuickFilter, SIGNAL(toggled(bool)), this, SLOT(onButtonQuickFilterToggled(bool)));
 
-    MainWindow::getMainWindow()->setSplashScreenMessage(tr("Updating files in default view..."));
+    qmndr::Internals::instance().mainWindow().setSplashScreenMessage(tr("Updating files in default view..."));
     // The explorer should view "C:" at startup
     view->changeDir("C:");
 }

@@ -28,7 +28,6 @@
 #include <QObject>
 
 class ArchiveInfo;
-class MainWindow;
 class ZipUnzipProgressDialog;
 
 class ArchiveCommand : public QObject, public Command
@@ -58,7 +57,6 @@ private:
     bool mode_;
     ArchiveInfo* archiveInfo_;
     ZipUnzipProgressDialog* progressDlg_;
-    MainWindow* mainWindow_;
 };
 
 #endif // ARCHIVECOMMAND_H

@@ -22,6 +22,7 @@
 **
 ****************************************************************************/
 #include "filelistwidget.h"
+#include "internals.h"
 #include <QKeyEvent>
 #include <QFileIconProvider>
 #include <QtGui>
@@ -272,7 +273,7 @@ void FileListWidget::fillFileList(const WinFileInfoPtrList& files, const WinFile
     // Icons über QFileIconProvider besorgen....
     QSharedPointer<QFileIconProvider> iconProvider(new QFileIconProvider);
 
-    FileTypeIcons* fileTypeIcons=MainWindow::getFileTypeIcons();
+    FileTypeIcons& fileTypeIcons = qmndr::Internals::instance().fileTypeIcons();
 
     quint64 insertCount=0;
     for(WinFileInfoIndices::const_iterator it=visibleIndices.begin(); it!=visibleIndices.end(); it++)
@@ -296,11 +297,11 @@ void FileListWidget::fillFileList(const WinFileInfoPtrList& files, const WinFile
         // on an C2Q 6600 system).
         //
         QString fileTypeDescription=WinFileInfo::getFileTypeDescripton(*fileInfo);
-        if(!fileTypeIcons->contains(fileTypeDescription) && fileInfo->isDir() && !fileInfo->isSymLink())
-                    (*fileTypeIcons)[fileTypeDescription]=iconProvider->icon(QFileIconProvider::Folder);
+        if(!fileTypeIcons.contains(fileTypeDescription) && fileInfo->isDir() && !fileInfo->isSymLink())
+                    fileTypeIcons[fileTypeDescription]=iconProvider->icon(QFileIconProvider::Folder);
 
-        if(!fileTypeIcons->contains(fileTypeDescription) && !fileInfo->isDir())
-            (*fileTypeIcons)[fileTypeDescription]=fileInfo->getWinIcon();
+        if(!fileTypeIcons.contains(fileTypeDescription) && !fileInfo->isDir())
+            fileTypeIcons[fileTypeDescription]=fileInfo->getWinIcon();
 
         // Under the first collumn of a row goes a user-defined QVariant which holds the
         // QFileInfo-Object for the entry created from QDir.
@@ -310,17 +311,17 @@ void FileListWidget::fillFileList(const WinFileInfoPtrList& files, const WinFile
             if(fileInfo->isSymLink())
             {
                 if(mode==LIST)
-                    item=new QListWidgetItem((*fileTypeIcons)["ICON_FOLDER_WITH_LINK16"], fileInfo->fileName());
+                    item=new QListWidgetItem(fileTypeIcons["ICON_FOLDER_WITH_LINK16"], fileInfo->fileName());
                 else
-                    item=new QListWidgetItem((*fileTypeIcons)["ICON_FOLDER_WITH_LINK32"], fileInfo->fileName());
+                    item=new QListWidgetItem(fileTypeIcons["ICON_FOLDER_WITH_LINK32"], fileInfo->fileName());
             }
             else
-                item=new QListWidgetItem((*fileTypeIcons)[fileTypeDescription], fileInfo->fileName());
+                item=new QListWidgetItem(fileTypeIcons[fileTypeDescription], fileInfo->fileName());
             item->setToolTip(tr("Creation date: ")+date);
         }
         else
         {
-            item=new QListWidgetItem((*fileTypeIcons)[fileTypeDescription], fileInfo->fileName());
+            item=new QListWidgetItem(fileTypeIcons[fileTypeDescription], fileInfo->fileName());
             item->setToolTip(tr("Type")+": "+fileTypeDescription+"\n"+
                              tr("Size")+": "+fileSize+"\n"+
                              tr("Last modified")+": "+date);

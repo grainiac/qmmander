@@ -28,6 +28,7 @@
 #include "fileexplorertarget.h"
 #include "archive.h"
 #include "dropcommand.h"
+#include "internals.h"
 
 #include <QDirModel>
 #include <QDateTime>
@@ -67,11 +68,11 @@ FileExplorerView::FileExplorerView(const FileExplorer& fileExplorer, QWidget *pa
     ui_->tableWidget->horizontalHeader()->setSectionsClickable(true);
     ui_->tableWidget->horizontalHeader()->setSortIndicator(0, Qt::AscendingOrder);
 
-    MainWindow::getMainWindow()->setSplashScreenMessage(tr("Loading filesystem model for tree view..."));
+    qmndr::Internals::instance().mainWindow().setSplashScreenMessage(tr("Loading filesystem model for tree view..."));
 
-    QFileSystemModel* pModel=const_cast<QFileSystemModel*>(MainWindow::getFileSystemModel());
-    QModelIndex root=pModel->setRootPath("C:");
-    ui_->treeView->setModel(pModel);
+    QFileSystemModel& model = qmndr::Internals::instance().fileSystemModel();
+    QModelIndex root = model.setRootPath("C:");
+    ui_->treeView->setModel(&model);
     ui_->treeView->setRootIndex(root);
     ui_->treeView->setHeaderHidden(true);
     ui_->treeView->setColumnHidden(1, true);
@@ -85,10 +86,10 @@ FileExplorerView::FileExplorerView(const FileExplorer& fileExplorer, QWidget *pa
     connect(ui_->tableWidget->horizontalHeader(), SIGNAL(sectionClicked(int)), this, SLOT(tableHeaderClicked(int)));
 
     // Connect driveChanged signal
-    connect(this, SIGNAL(driveChanged()), MainWindow::getMainWindow(), SLOT(reflectDriveChanged()));
+    connect(this, SIGNAL(driveChanged()), &qmndr::Internals::instance().mainWindow(), SLOT(reflectDriveChanged()));
 
     // Connect driveListChanged signal
-    connect(MainWindow::getMainWindow(), SIGNAL(driveListChanged()), this, SLOT(driveListChanged()));
+    connect(&qmndr::Internals::instance().mainWindow(), SIGNAL(driveListChanged()), this, SLOT(driveListChanged()));
 }
 
 FileExplorerView::FileExplorerView(const FileExplorerView& source)
@@ -121,8 +122,8 @@ FileExplorerView::FileExplorerView(const FileExplorerView& source)
     ui_->tableWidget->horizontalHeader()->setSectionsClickable(true);
     ui_->tableWidget->horizontalHeader()->setSortIndicator(0, Qt::AscendingOrder);
 
-    QAbstractItemModel* pModel=dynamic_cast<QAbstractItemModel*>(const_cast<QFileSystemModel*>(MainWindow::getFileSystemModel()));
-    ui_->treeView->setModel(pModel);
+    QAbstractItemModel& model = dynamic_cast<QAbstractItemModel&>( qmndr::Internals::instance().fileSystemModel() );
+    ui_->treeView->setModel(&model);
     ui_->treeView->setHeaderHidden(true);
     ui_->treeView->setColumnHidden(1, true);
     ui_->treeView->setColumnHidden(2, true);
@@ -132,7 +133,7 @@ FileExplorerView::FileExplorerView(const FileExplorerView& source)
     connect(ui_->tableWidget->horizontalHeader(), SIGNAL(sectionClicked(int)), this, SLOT(tableHeaderClicked(int)));
 
     // Connect driveChanged signal
-    connect(this, SIGNAL(driveChanged()), MainWindow::getMainWindow(), SLOT(reflectDriveChanged()));
+    connect(this, SIGNAL(driveChanged()), &qmndr::Internals::instance().mainWindow(), SLOT(reflectDriveChanged()));
 
     // Add buttons for drives
     setupDriveComboBox();
@@ -172,8 +173,8 @@ void FileExplorerView::setupDriveComboBox()
     ui_->comboBox->view()->setFixedWidth(65);
     ui_->horizontalLayoutNavigation->insertWidget(1,ui_->comboBox);
 
-    QStringList driveList=WinFileInfo::getDriveList();    
-    FileTypeIcons* pFileTypeIcons=MainWindow::getFileTypeIcons();    
+    QStringList driveList = WinFileInfo::getDriveList();
+    FileTypeIcons& fileTypeIcons = qmndr::Internals::instance().fileTypeIcons();
 
     for(int i=0; i<driveList.count(); i++)
     {
@@ -189,24 +190,24 @@ void FileExplorerView::setupDriveComboBox()
             break;
         case DRIVE_REMOVABLE:
             if(strDriveName=="A:" || strDriveName=="B:")
-                pIcon=&(*pFileTypeIcons)["DRIVE_REMOVABLE_FDD"];
+                pIcon=&fileTypeIcons["DRIVE_REMOVABLE_FDD"];
             else
-                pIcon=&(*pFileTypeIcons)["DRIVE_REMOVABLE_STICK"];
+                pIcon=&fileTypeIcons["DRIVE_REMOVABLE_STICK"];
             break;
         case DRIVE_FIXED:
             if(strDriveName=="C:")
-                pIcon=&(*pFileTypeIcons)["DRIVE_FIXED_SYS"];
+                pIcon=&fileTypeIcons["DRIVE_FIXED_SYS"];
             else
-                pIcon=&(*pFileTypeIcons)["DRIVE_FIXED"];
+                pIcon=&fileTypeIcons["DRIVE_FIXED"];
             break;
         case DRIVE_REMOTE:
-            pIcon=&(*pFileTypeIcons)["DRIVE_REMOTE"];
+            pIcon=&fileTypeIcons["DRIVE_REMOTE"];
             break;
         case DRIVE_CDROM:
-            pIcon=&(*pFileTypeIcons)["DRIVE_CDROM"];
+            pIcon=&fileTypeIcons["DRIVE_CDROM"];
             break;
         case DRIVE_RAMDISK:
-            pIcon=&(*pFileTypeIcons)["DRIVE_FIXED"];
+            pIcon=&fileTypeIcons["DRIVE_FIXED"];
             break;
         }
         if(pIcon && ui_->comboBox->findText(strDriveName)==-1)
@@ -245,7 +246,7 @@ void FileExplorerView::drivesComboBoxIndexChanged(QString newDrive)
         QFile newPath(newDrive);
         if(newPath.exists() && changeDirNeeded())
         {
-            QModelIndex root=const_cast<QFileSystemModel*>(MainWindow::getFileSystemModel())->setRootPath(newDrive);
+            QModelIndex root = qmndr::Internals::instance().fileSystemModel().setRootPath(newDrive);
             ui_->treeView->setRootIndex(root);
             if(newDrive!="")
                 changeDir(newDrive);
@@ -323,7 +324,7 @@ void FileExplorerView::treeItemChanged(const QModelIndex& index)
 {
     if(index.isValid())
     {
-        QString strPath=const_cast<QFileSystemModel*>(MainWindow::getFileSystemModel())->filePath(index);
+        QString strPath = qmndr::Internals::instance().fileSystemModel().filePath(index);
         changeDir(strPath);
     }
 }
@@ -406,7 +407,7 @@ void FileExplorerView::updateStyleSheets()
 
 void FileExplorerView::updateTreeView(QString actualPath)
 {
-    QModelIndex index=MainWindow::getFileSystemModel()->index(actualPath);
+    QModelIndex index = qmndr::Internals::instance().fileSystemModel().index(actualPath);
     if(index.isValid())
         ui_->treeView->setCurrentIndex(index);
 }

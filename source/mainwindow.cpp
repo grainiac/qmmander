@@ -33,8 +33,6 @@
 #include <QTranslator>
 #include <QSettings>
 #include <QtWidgets/QMessageBox>
-#include <QNetworkAccessManager>
-#include <QtWidgets/QFileSystemModel>
 #include <QKeyEvent>
 #include "drivecheckerthread.h"
 #include "shlobj.h"
@@ -50,14 +48,10 @@
 #include "newfoldercommand.h"
 #include "renamecommand.h"
 #include "updateqmmandercommand.h"
+#include "internals.h"
 
 #define SHGFP_TYPE_CURRENT 0
 
-QFileSystemModel*      MainWindow::fileSystemModel_=0;
-MainWindow*            MainWindow::mainWindow_=0;
-TableItemPrototypes    MainWindow::tableItemPrototypeMap_;
-FileTypeIcons          MainWindow::iconCacheMap_;
-QNetworkAccessManager* MainWindow::netAccessManager_=new QNetworkAccessManager();
 
 MainWindow::MainWindow(const QSplashScreen* pSplashScreen, QWidget *parent)
 :   QMainWindow(parent),
@@ -66,8 +60,8 @@ MainWindow::MainWindow(const QSplashScreen* pSplashScreen, QWidget *parent)
     leftExplorer_(0),
     rightExplorer_(0),
     alreadyShown_(false)
-{    
-    mainWindow_=this;
+{
+    qmndr::Internals::instance().setMainWindow(this);
 
     // Setup drive checker thread
     driveCheckerThread_=new DriveCheckerThread(this);
@@ -77,14 +71,6 @@ MainWindow::MainWindow(const QSplashScreen* pSplashScreen, QWidget *parent)
     qRegisterMetaTypeStreamOperators<WinFileInfo>("WinFileInfo");
 
     ui_->setupUi(this);
-
-    // Empty item for QTableWidgets prototype-map
-    MainWindow::getTableItemPrototypes()->insert("__EMPTY_ITEM_LA__", QTableWidgetItem(""));
-    (*MainWindow::getTableItemPrototypes())["__EMPTY_ITEM_LA__"].setTextAlignment(Qt::AlignVCenter | Qt::AlignLeft);
-    MainWindow::getTableItemPrototypes()->insert("__EMPTY_ITEM_RA__", QTableWidgetItem(""));
-    (*MainWindow::getTableItemPrototypes())["__EMPTY_ITEM_RA__"].setTextAlignment(Qt::AlignVCenter | Qt::AlignRight);
-
-    initializeIconCacheMap();
 
     splitter_      = new QSplitter(this);
     splitter_->setAttribute(Qt::WA_DeleteOnClose);
@@ -115,42 +101,7 @@ MainWindow::~MainWindow()
 {
     driveCheckerThread_->terminate();
     delete driveCheckerThread_;
-    if(fileSystemModel_)
-        delete fileSystemModel_;
     delete ui_;
-}
-
-void MainWindow::initializeIconCacheMap()
-{
-    // Load folder icons
-    iconCacheMap_["ICON_FOLDER_WITH_LINK16"]=QIcon(QPixmap(":/images/images/folder_link16.png"));
-    iconCacheMap_["ICON_FOLDER_WITH_LINK16"]=QIcon(QPixmap(":/images/images/folder_link16.png"));
-    iconCacheMap_["ICON_FOLDER_WITH_LINK32"]=QIcon(QPixmap(":/images/images/folder_link32.png"));
-
-    // Load drive icons
-    iconCacheMap_["DRIVE_REMOVABLE_FDD"]=QIcon(QPixmap(":/images/images/drivefdd16.png"));
-    iconCacheMap_["DRIVE_REMOVABLE_STICK"]=QIcon(QPixmap(":/images/images/drivestick16.png"));
-    iconCacheMap_["DRIVE_FIXED"]=QIcon(QPixmap(":/images/images/drivehdd16.png"));
-    iconCacheMap_["DRIVE_FIXED_SYS"]=QIcon(QPixmap(":/images/images/drivehddsys16.png"));
-    iconCacheMap_["DRIVE_REMOTE"]=QIcon(QPixmap(":/images/images/drivenet16.png"));
-    iconCacheMap_["DRIVE_CDROM"]=QIcon(QPixmap(":/images/images/driveoptical16.png"));
-
-    iconCacheMap_["DRIVE_REMOVABLE_FDD48"]=QIcon(QPixmap(":/images/images/drivefdd48.png"));
-    iconCacheMap_["DRIVE_REMOVABLE_STICK48"]=QIcon(QPixmap(":/images/images/drivestick48.png"));
-    iconCacheMap_["DRIVE_FIXED48"]=QIcon(QPixmap(":/images/images/drivehdd48.png"));
-    iconCacheMap_["DRIVE_FIXED_SYS48"]=QIcon(QPixmap(":/images/images/drivehddsys48.png"));
-    iconCacheMap_["DRIVE_REMOTE48"]=QIcon(QPixmap(":/images/images/drivenet48.png"));
-    iconCacheMap_["DRIVE_CDROM48"]=QIcon(QPixmap(":/images/images/drivedvd48.png"));
-}
-
-const MainWindow* MainWindow::getMainWindow()
-{
-    return mainWindow_;
-}
-
-QNetworkAccessManager& MainWindow::getNetworkAccessManager()
-{
-    return *netAccessManager_;
 }
 
 void MainWindow::setSplashScreenMessage(QString message, QColor color) const
@@ -160,28 +111,6 @@ void MainWindow::setSplashScreenMessage(QString message, QColor color) const
         const_cast<QSplashScreen*>(splashScreen_)->showMessage(message, Qt::AlignBottom | Qt::AlignLeft, color);
         qApp->processEvents();
     }
-}
-
-const QFileSystemModel* MainWindow::getFileSystemModel()
-{
-    if(!fileSystemModel_)
-    {
-        fileSystemModel_=new QFileSystemModel();
-        fileSystemModel_->setResolveSymlinks(true);
-        QDir::Filters filters=QDir::AllDirs | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System;
-        fileSystemModel_->setFilter(filters);
-    }
-    return fileSystemModel_;
-}
-
-TableItemPrototypes* MainWindow::getTableItemPrototypes()
-{
-    return &tableItemPrototypeMap_;
-}
-
-FileTypeIcons* MainWindow::getFileTypeIcons()
-{
-    return &iconCacheMap_;
 }
 
 void MainWindow::changeEvent(QEvent *e)
@@ -248,6 +177,7 @@ void MainWindow::setupDriveButtons()
     {
         QString strDriveName=driveList.at(i);
 
+        FileTypeIcons& icons = qmndr::Internals::instance().fileTypeIcons();
         const QIcon* icon=0;
         quint32 uRet=GetDriveType(strDriveName.toStdWString().c_str());
         switch(uRet)
@@ -257,24 +187,24 @@ void MainWindow::setupDriveButtons()
             break;
         case DRIVE_REMOVABLE:
             if(strDriveName=="A:" || strDriveName=="B:")
-                icon=&iconCacheMap_["DRIVE_REMOVABLE_FDD48"];
+                icon=&icons["DRIVE_REMOVABLE_FDD48"];
             else
-                icon=&iconCacheMap_["DRIVE_REMOVABLE_STICK48"];
+                icon=&icons["DRIVE_REMOVABLE_STICK48"];
             break;
         case DRIVE_FIXED:
             if(strDriveName=="C:")
-                icon=&iconCacheMap_["DRIVE_FIXED_SYS48"];
+                icon=&icons["DRIVE_FIXED_SYS48"];
             else
-                icon=&iconCacheMap_["DRIVE_FIXED48"];
+                icon=&icons["DRIVE_FIXED48"];
             break;
         case DRIVE_REMOTE:
-            icon=&iconCacheMap_["DRIVE_REMOTE48"];
+            icon=&icons["DRIVE_REMOTE48"];
             break;
         case DRIVE_CDROM:
-            icon=&iconCacheMap_["DRIVE_CDROM48"];
+            icon=&icons["DRIVE_CDROM48"];
             break;
         case DRIVE_RAMDISK:
-            icon=&iconCacheMap_["DRIVE_FIXED48"];
+            icon=&icons["DRIVE_FIXED48"];
             break;
         }
 
@@ -731,7 +661,7 @@ bool MainWindow::isLeftExplorer(const FileExplorer* const explorer) const
 
 void MainWindow::readSettings()
 {
-    QSettings settings("qmmander_settings.ini", QSettings::IniFormat);
+    QSettings& settings = qmndr::Internals::instance().settings();
 
     restoreGeometry(settings.value("geometry", QByteArray()).toByteArray());
     restoreState(settings.value("layout", QByteArray()).toByteArray());
@@ -773,7 +703,7 @@ void MainWindow::readSettings()
 
 void MainWindow::writeSettings()
 {
-    QSettings settings("qmmander_settings.ini", QSettings::IniFormat);
+    QSettings& settings = qmndr::Internals::instance().settings();
 
     settings.setValue("geometry", saveGeometry());
     settings.setValue("layout", saveState());

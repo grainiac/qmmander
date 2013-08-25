@@ -39,13 +39,8 @@ class FileExplorerView;
 class DriveCheckerThread;
 class QSplitter;
 class QFileInfo;
-class QFileSystemModel;
-class QNetworkAccessManager;
 class QStringList;
 class UpdateQmmanderCommand;
-
-typedef QMap<QString, QTableWidgetItem> TableItemPrototypes;
-typedef QMap<QString, QIcon>            FileTypeIcons;
 
 namespace Ui
 {
@@ -66,12 +61,6 @@ public:
     bool isLeftExplorer(const FileExplorer* const explorer) const;
 
     int getDriveCount() const;
-
-    static const QFileSystemModel* getFileSystemModel();
-    static TableItemPrototypes*    getTableItemPrototypes();
-    static FileTypeIcons*          getFileTypeIcons();
-    static const MainWindow*       getMainWindow();
-    static QNetworkAccessManager&  getNetworkAccessManager();
 
     void setSplashScreenMessage(QString message, QColor color = Qt::black) const;
 
@@ -159,12 +148,6 @@ private:
     bool isReflectingViewStates_;
 
     DriveCheckerThread* driveCheckerThread_;
-
-    static TableItemPrototypes tableItemPrototypeMap_;
-    static FileTypeIcons iconCacheMap_;
-    static QFileSystemModel* fileSystemModel_;
-    static MainWindow* mainWindow_;
-    static QNetworkAccessManager* netAccessManager_;
 };
 
 #endif // MAINWINDOW_H

@@ -25,6 +25,7 @@
 #include "archiveinfo.h"
 #include "FileExplorer.h"
 #include "mainwindow.h"
+#include "internals.h"
 #include "unzipdialog.h"
 #include "zipdialog.h"
 #include "zipunzipprogressdialog.h"
@@ -33,9 +34,8 @@
 
 ArchiveCommand::ArchiveCommand(bool mode)
 :   mode_(mode),
-    archiveInfo_(0),
-    progressDlg_(0),
-    mainWindow_(const_cast<MainWindow*>(MainWindow::getMainWindow()))
+    archiveInfo_(nullptr),
+    progressDlg_(nullptr)
 {
 }
 
@@ -53,7 +53,7 @@ void ArchiveCommand::zipMode()
 
     if(archiveInfo_)
     {
-        QSharedPointer<ZipDialog> zipDlg(new ZipDialog(mainWindow_, archiveInfo_));
+        QSharedPointer<ZipDialog> zipDlg(new ZipDialog(&qmndr::Internals::instance().mainWindow(), archiveInfo_));
         if(zipDlg->exec()==QDialog::Accepted)
            doArchiveOperation();
         else
@@ -67,7 +67,7 @@ void ArchiveCommand::unzipMode()
 
     if(archiveInfo_)
     {
-        QSharedPointer<UnzipDialog> unzipDlg(new UnzipDialog(mainWindow_, archiveInfo_));
+        QSharedPointer<UnzipDialog> unzipDlg(new UnzipDialog(&qmndr::Internals::instance().mainWindow(), archiveInfo_));
         if(unzipDlg->exec()==QDialog::Accepted)
            doArchiveOperation();
         else
@@ -77,14 +77,15 @@ void ArchiveCommand::unzipMode()
 
 ArchiveInfo* ArchiveCommand::getZipUnzipFilesAndDestination(bool trueZipModeFalseUnzipMode)
 {
+    MainWindow& mainWindow = qmndr::Internals::instance().mainWindow();
     ArchiveInfo* archiveInfo=new ArchiveInfo(trueZipModeFalseUnzipMode);
-    archiveInfo->m_from=mainWindow_->getActiveExplorer()->getSelectedPath();
-    archiveInfo->m_to=mainWindow_->getInactiveExplorer()->getSelectedPath();
-    archiveInfo->m_selectedFiles=mainWindow_->getActiveExplorer()->getSelectedFiles();
+    archiveInfo->m_from=mainWindow.getActiveExplorer()->getSelectedPath();
+    archiveInfo->m_to=mainWindow.getInactiveExplorer()->getSelectedPath();
+    archiveInfo->m_selectedFiles=mainWindow.getActiveExplorer()->getSelectedFiles();
 
     if(archiveInfo && archiveInfo->m_selectedFiles.count()==0)
     {
-        QMessageBox::warning(mainWindow_,
+        QMessageBox::warning(&mainWindow,
                              QObject::tr("No files selected"),
                              QObject::tr("Please select some files!"));
         delete archiveInfo;
@@ -95,7 +96,8 @@ ArchiveInfo* ArchiveCommand::getZipUnzipFilesAndDestination(bool trueZipModeFals
 
 void ArchiveCommand::doArchiveOperation()
 {
-    progressDlg_=new ZipUnzipProgressDialog(mainWindow_, archiveInfo_);
+    MainWindow& mainWindow = qmndr::Internals::instance().mainWindow();
+    progressDlg_=new ZipUnzipProgressDialog(&mainWindow, archiveInfo_);
     progressDlg_->setAttribute(Qt::WA_DeleteOnClose);
     progressDlg_->show();
     connect(progressDlg_, SIGNAL(finished()), this, SLOT(ZipUnzipOperationFinished()));
@@ -103,9 +105,10 @@ void ArchiveCommand::doArchiveOperation()
 
 void ArchiveCommand::ZipUnzipOperationFinished()
 {
+    MainWindow& mainWindow = qmndr::Internals::instance().mainWindow();
     delete progressDlg_;
-    mainWindow_->getActiveExplorer()->refresh();
-    mainWindow_->getInactiveExplorer()->refresh();
+    mainWindow.getActiveExplorer()->refresh();
+    mainWindow.getInactiveExplorer()->refresh();
     emit(archiveCommandFinished(this));
 }
 

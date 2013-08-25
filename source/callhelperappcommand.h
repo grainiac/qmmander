@@ -45,7 +45,6 @@ private:
     void executeNetworkDriveConnectDialog();
     void executeNetworkDriveDisconnectDialog();
     void executeFileInformationDialog();
-    MainWindow* getMainWindow();
 
     enum CommandType
     {

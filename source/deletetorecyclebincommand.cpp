@@ -24,6 +24,7 @@
 #include "deletetorecyclebincommand.h"
 
 #include "mainwindow.h"
+#include "internals.h"
 #include "FileExplorer.h"
 #include "shfileoperations.h"
 
@@ -40,7 +41,7 @@ DeleteToRecycleBinCommand::~DeleteToRecycleBinCommand()
 void DeleteToRecycleBinCommand::execute()
 {
     SHFILEOPSTRUCTW st;
-    st.hwnd=(HWND)MainWindow::getMainWindow()->winId();
+    st.hwnd=(HWND)qmndr::Internals::instance().mainWindow().winId();
     st.wFunc=FO_DELETE;
     st.fFlags=FOF_ALLOWUNDO | ~FOF_NOCONFIRMATION;
     st.pFrom=files2Delete_;
@@ -51,6 +52,6 @@ void DeleteToRecycleBinCommand::execute()
 DeleteToRecycleBinCommand* DeleteToRecycleBinCommand::deleteCommandForActualSelection()
 {
     DeleteToRecycleBinCommand* dc=new DeleteToRecycleBinCommand();
-    dc->files2Delete_ = getSHFileOperationFromString(const_cast<FileExplorer*>(MainWindow::getMainWindow()->getActiveExplorer())->getSelectedFiles());
+    dc->files2Delete_ = getSHFileOperationFromString(const_cast<FileExplorer*>(qmndr::Internals::instance().mainWindow().getActiveExplorer())->getSelectedFiles());
     return dc;
 }

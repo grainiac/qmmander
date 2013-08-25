@@ -24,6 +24,7 @@
 #include "callhelperappcommand.h"
 #include "FileExplorer.h"
 #include "mainwindow.h"
+#include "internals.h"
 #include <QMessageBox>
 #include <QObject>
 
@@ -81,29 +82,29 @@ CallHelperAppCommand* CallHelperAppCommand::getFileInformationDialog()
 
 void CallHelperAppCommand::executeWindowsCalculator()
 {
-    ShellExecute((HWND)getMainWindow()->winId(), TEXT("open"), TEXT("calc.exe"), TEXT(""), TEXT(""), SW_SHOW);
+    ShellExecute((HWND)qmndr::Internals::instance().mainWindow().winId(), TEXT("open"), TEXT("calc.exe"), TEXT(""), TEXT(""), SW_SHOW);
 }
 
 void CallHelperAppCommand::executeDosBox()
 {
     ShellExecute(0,TEXT("open"), TEXT("cmd"), TEXT("/C \"start \"Qmmander DOS-Box\"\""),
-                 const_cast<FileExplorer*>(getMainWindow()->getActiveExplorer())->getSelectedPath().toStdWString().c_str(),
+                 const_cast<FileExplorer*>(qmndr::Internals::instance().mainWindow().getActiveExplorer())->getSelectedPath().toStdWString().c_str(),
                  SW_SHOW);
 }
 
 void CallHelperAppCommand::executeNetworkDriveConnectDialog()
 {
-    WNetConnectionDialog((HWND)getMainWindow()->winId(), RESOURCETYPE_DISK);
+    WNetConnectionDialog((HWND)qmndr::Internals::instance().mainWindow().winId(), RESOURCETYPE_DISK);
 }
 
 void CallHelperAppCommand::executeNetworkDriveDisconnectDialog()
 {
-    WNetDisconnectDialog((HWND)getMainWindow()->winId(), RESOURCETYPE_DISK);
+    WNetDisconnectDialog((HWND)qmndr::Internals::instance().mainWindow().winId(), RESOURCETYPE_DISK);
 }
 
 void CallHelperAppCommand::executeFileInformationDialog()
 {
-    WinFileInfoList selectedFiles=const_cast<FileExplorer*>(getMainWindow()->getActiveExplorer())->getSelectedFiles();
+    WinFileInfoList selectedFiles=const_cast<FileExplorer*>(qmndr::Internals::instance().mainWindow().getActiveExplorer())->getSelectedFiles();
     if(selectedFiles.count()==1)
     {
         WinFileInfo fi=selectedFiles.at(0);
@@ -126,10 +127,6 @@ void CallHelperAppCommand::executeFileInformationDialog()
         ShellExecuteEx(&sei);
     }
     else
-        QMessageBox::information(getMainWindow(), QObject::tr("Properties"), "<HTML><p>"+QObject::tr("Please select <b>one</b> file!")+"</p></HTML>");
+        QMessageBox::information(&qmndr::Internals::instance().mainWindow(), QObject::tr("Properties"), "<HTML><p>"+QObject::tr("Please select <b>one</b> file!")+"</p></HTML>");
 }
 
-MainWindow* CallHelperAppCommand::getMainWindow()
-{
-    return const_cast<MainWindow*>(MainWindow::getMainWindow());
-}

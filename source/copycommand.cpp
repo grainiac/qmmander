@@ -23,6 +23,7 @@
 ****************************************************************************/
 #include "copycommand.h"
 #include "mainwindow.h"
+#include "internals.h"
 #include "FileExplorer.h"
 #include "shfileoperations.h"
 
@@ -41,7 +42,7 @@ CopyCommand::~CopyCommand()
 void CopyCommand::execute()
 {
     SHFILEOPSTRUCTW st;
-    st.hwnd   = (HWND)MainWindow::getMainWindow()->winId();
+    st.hwnd   = (HWND)qmndr::Internals::instance().mainWindow().winId();
     st.wFunc  = FO_COPY;
     st.fFlags = 0x00000000;
     st.pFrom  = sourceFiles_;
@@ -52,8 +53,8 @@ void CopyCommand::execute()
 CopyCommand* CopyCommand::copyCommandForActualSelection()
 {
     CopyCommand* cc=new CopyCommand();
-    cc->sourceFiles_ = getSHFileOperationFromString(const_cast<FileExplorer*>(MainWindow::getMainWindow()->getActiveExplorer())->getSelectedFiles());
-    cc->destinationDirectory_ = getSHFileOperationCopyToString(const_cast<FileExplorer*>(MainWindow::getMainWindow()->getInactiveExplorer())->getSelectedPath());
+    cc->sourceFiles_ = getSHFileOperationFromString(const_cast<FileExplorer*>(qmndr::Internals::instance().mainWindow().getActiveExplorer())->getSelectedFiles());
+    cc->destinationDirectory_ = getSHFileOperationCopyToString(const_cast<FileExplorer*>(qmndr::Internals::instance().mainWindow().getInactiveExplorer())->getSelectedPath());
     return cc;
 }
 

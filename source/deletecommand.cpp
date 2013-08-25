@@ -23,6 +23,7 @@
 ****************************************************************************/
 #include "deletecommand.h"
 #include "mainwindow.h"
+#include "internals.h"
 #include "FileExplorer.h"
 #include "shfileoperations.h"
 
@@ -39,7 +40,7 @@ DeleteCommand::~DeleteCommand()
 void DeleteCommand::execute()
 {
     SHFILEOPSTRUCTW st;
-    st.hwnd = (HWND)MainWindow::getMainWindow()->winId();
+    st.hwnd = (HWND)qmndr::Internals::instance().mainWindow().winId();
     st.wFunc=FO_DELETE;
     st.fFlags=0x4000; // FOF_WANTNUKEWARNING for OS >= Vista
     st.pFrom=files2Delete_;
@@ -50,7 +51,7 @@ void DeleteCommand::execute()
 DeleteCommand* DeleteCommand::deleteCommandForActualSelection()
 {
     DeleteCommand* dc=new DeleteCommand();
-    dc->files2Delete_ = getSHFileOperationFromString(const_cast<FileExplorer*>(MainWindow::getMainWindow()->getActiveExplorer())->getSelectedFiles());
+    dc->files2Delete_ = getSHFileOperationFromString(const_cast<FileExplorer*>(qmndr::Internals::instance().mainWindow().getActiveExplorer())->getSelectedFiles());
     return dc;
 }
 

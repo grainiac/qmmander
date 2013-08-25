@@ -23,6 +23,8 @@
 ****************************************************************************/
 #include "renamecommand.h"
 #include "mainwindow.h"
+#include "mainwindow.h"
+#include "internals.h"
 #include "FileExplorer.h"
 #include "shfileoperations.h"
 #include "renamedialog.h"
@@ -31,38 +33,38 @@
 
 void RenameCommand::execute()
 {
-    MainWindow* parentWidget=const_cast<MainWindow*>(MainWindow::getMainWindow());
-    WinFileInfoList selectedFiles=parentWidget->getActiveExplorer()->getSelectedFiles();
-    if(selectedFiles.count()==1)
+    MainWindow& parentWidget = qmndr::Internals::instance().mainWindow();
+    WinFileInfoList selectedFiles = parentWidget.getActiveExplorer()->getSelectedFiles();
+    if(selectedFiles.count() == 1)
     {
-        WinFileInfo fi=selectedFiles.at(0);
-        RenameDialog dlg(fi, parentWidget);
-        if(dlg.exec()==QDialog::Accepted)
+        WinFileInfo fi = selectedFiles.at(0);
+        RenameDialog dlg(fi, &parentWidget);
+        if(dlg.exec() == QDialog::Accepted)
         {
-            QString newFileName=dlg.getFileName();
-            if(newFileName!=fi.fileName())
+            QString newFileName = dlg.getFileName();
+            if(newFileName != fi.fileName())
             {
                 if(fi.isFile())
                 {
                     QFile file(fi.filePath());
                     if(!file.rename(fi.path()+"\\"+newFileName))
-                        QMessageBox::information(parentWidget, QObject::tr("Error"), QObject::tr("Couldn't rename file %1!").arg(fi.fileName()));
+                        QMessageBox::information(&parentWidget, QObject::tr("Error"), QObject::tr("Couldn't rename file %1!").arg(fi.fileName()));
                     else
-                        parentWidget->getActiveExplorer()->refresh();
+                        parentWidget.getActiveExplorer()->refresh();
                 }
                 else if(fi.isDir())
                 {
                     QDir dir(fi.filePath());
                     if(!dir.rename(fi.filePath(), fi.path()+"\\"+newFileName))
-                        QMessageBox::information(parentWidget, QObject::tr("Error"), QObject::tr("Couldn't rename directory %1!").arg(fi.fileName()));
+                        QMessageBox::information(&parentWidget, QObject::tr("Error"), QObject::tr("Couldn't rename directory %1!").arg(fi.fileName()));
                     else
-                        parentWidget->getActiveExplorer()->refresh();
+                        parentWidget.getActiveExplorer()->refresh();
                 }
             }
         }
     }
     else
-        QMessageBox::information(parentWidget, QObject::tr("Rename"), "<HTML><p>"+QObject::tr("Please select <b>one</b> file!")+"</p></HTML>");
+        QMessageBox::information(&parentWidget, QObject::tr("Rename"), "<HTML><p>"+QObject::tr("Please select <b>one</b> file!")+"</p></HTML>");
 
 }
 

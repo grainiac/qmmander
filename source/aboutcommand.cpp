@@ -25,6 +25,7 @@
 #include <QString>
 #include <QMessageBox>
 #include "mainwindow.h"
+#include "internals.h"
 #include "version.h"
 
 void AboutCommand::execute()
@@ -39,7 +40,7 @@ void AboutCommand::execute()
                   QString("<tr><td colspan=""2""><a href=\"http://code.google.com/p/qmmander/\">http://code.google.com/p/qmmander/</a></td></tr>")+
                   QString("</tbody></table></body></html>");
 
-    QMessageBox msgBox(const_cast<MainWindow*>(MainWindow::getMainWindow()));
+    QMessageBox msgBox(&qmndr::Internals::instance().mainWindow());
     msgBox.setStyleSheet("QMessageBox{background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 gray, stop: 0.6 white)}");
     msgBox.addButton(QMessageBox::Ok);
     msgBox.setText(html);

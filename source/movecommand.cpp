@@ -23,6 +23,7 @@
 ****************************************************************************/
 #include "movecommand.h"
 #include "mainwindow.h"
+#include "internals.h"
 #include "FileExplorer.h"
 #include "shfileoperations.h"
 
@@ -41,7 +42,7 @@ MoveCommand::~MoveCommand()
 void MoveCommand::execute()
 {
     SHFILEOPSTRUCTW st;
-    st.hwnd   = (HWND) MainWindow::getMainWindow()->winId();
+    st.hwnd   = (HWND)qmndr::Internals::instance().mainWindow().winId();
     st.wFunc  = FO_MOVE;
     st.fFlags = FOF_MULTIDESTFILES | FOF_ALLOWUNDO;
     st.pFrom  = sourceFiles_;
@@ -52,9 +53,9 @@ void MoveCommand::execute()
 MoveCommand* MoveCommand::moveCommandForActualSelection()
 {
     MoveCommand* mc=new MoveCommand();
-    mc->sourceFiles_ = getSHFileOperationFromString(const_cast<FileExplorer*>(MainWindow::getMainWindow()->getActiveExplorer())->getSelectedFiles());
-    mc->destinationFiles_ = getSHFileOperationMoveToString(const_cast<FileExplorer*>(MainWindow::getMainWindow()->getActiveExplorer())->getSelectedFiles(),
-                                                           const_cast<FileExplorer*>(MainWindow::getMainWindow()->getInactiveExplorer())->getSelectedPath());
+    mc->sourceFiles_ = getSHFileOperationFromString(const_cast<FileExplorer*>(qmndr::Internals::instance().mainWindow().getActiveExplorer())->getSelectedFiles());
+    mc->destinationFiles_ = getSHFileOperationMoveToString(const_cast<FileExplorer*>(qmndr::Internals::instance().mainWindow().getActiveExplorer())->getSelectedFiles(),
+                                                           const_cast<FileExplorer*>(qmndr::Internals::instance().mainWindow().getInactiveExplorer())->getSelectedPath());
     return mc;
 }
 

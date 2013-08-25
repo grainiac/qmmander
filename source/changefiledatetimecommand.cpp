@@ -23,6 +23,7 @@
 ****************************************************************************/
 #include "changefiledatetimecommand.h"
 #include "mainwindow.h"
+#include "internals.h"
 #include "FileExplorer.h"
 #include "attributesdatedialog.h"
 #include "attributesanddatechangerthread.h"
@@ -33,11 +34,11 @@ ChangeFileDateTimeCommand::ChangeFileDateTimeCommand()
 
 void ChangeFileDateTimeCommand::execute()
 {
-    MainWindow* mainWindow=const_cast<MainWindow*>(MainWindow::getMainWindow());
-    WinFileInfoList files=mainWindow->getActiveExplorer()->getSelectedFiles();
+    MainWindow& mainWindow = qmndr::Internals::instance().mainWindow();
+    WinFileInfoList files = mainWindow.getActiveExplorer()->getSelectedFiles();
     if(files.count())
     {
-        AttributesDateDialog dlg(files, mainWindow);
+        AttributesDateDialog dlg(files, &mainWindow);
         if (dlg.exec()==QDialog::Accepted)
         {
             QProgressDialog* progressDialog=new QProgressDialog(tr("Adjusting file attributes and file dates"),
@@ -48,7 +49,7 @@ void ChangeFileDateTimeCommand::execute()
             AttributesAndDateChangerThread* thread=new AttributesAndDateChangerThread(files,
                                                                                       dlg.getFileProperties(),
                                                                                       *progressDialog,
-                                                                                      mainWindow);
+                                                                                      &mainWindow);
 
             connect(thread, SIGNAL(operationFinished(AttributesAndDateChangerThread*)), this, SLOT(attributesAndDateThreadFinished(AttributesAndDateChangerThread*)));
             connect(thread, SIGNAL(processMessage(QString)), progressDialog, SLOT(setLabelText(QString)));
@@ -63,8 +64,8 @@ void ChangeFileDateTimeCommand::execute()
 
 void ChangeFileDateTimeCommand::attributesAndDateThreadFinished(AttributesAndDateChangerThread* thread)
 {
-    MainWindow* mainWindow=const_cast<MainWindow*>(MainWindow::getMainWindow());
-    mainWindow->actionRefresh();
+    MainWindow& mainWindow = qmndr::Internals::instance().mainWindow();
+    mainWindow.actionRefresh();
     QProgressDialog* dlg=const_cast<QProgressDialog*>(&thread->getProgressDialog());
     dlg->done(0);
     delete dlg;

@@ -56,7 +56,8 @@ SOURCES += main.cpp \
     newfoldercommand.cpp \
     updateqmmandercommand.cpp \
     callhelperappcommand.cpp \
-    aboutcommand.cpp
+    aboutcommand.cpp \
+    internals.cpp
 HEADERS += mainwindow.h \
     FileExplorer.h \
     FileExplorerView.h \
@@ -104,7 +105,8 @@ HEADERS += mainwindow.h \
     newfoldercommand.h \
     updateqmmandercommand.h \
     callhelperappcommand.h \
-    aboutcommand.h
+    aboutcommand.h \
+    internals.h
 FORMS += mainwindow.ui \
     FileExplorer.ui \
     FileExplorerView.ui \

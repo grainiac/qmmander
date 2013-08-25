@@ -32,6 +32,7 @@
 #include <QtWidgets>
 
 #include "mainwindow.h"
+#include "internals.h"
 
 FileTableWidget::FileTableWidget(QWidget* parent)
 :   QTableWidget(parent),
@@ -80,7 +81,7 @@ void FileTableWidget::saveCollumnWidth(int collumn, int width)
         else
             registryKey="right_explorer/collumn_width_";
 
-        QSettings settings("qmmander_settings.ini", QSettings::IniFormat);
+        QSettings& settings = qmndr::Internals::instance().settings();
         int oldWidth=settings.value(QString("%1%2").arg(registryKey).arg(collumn), 75).toInt();
 
         if(width!=oldWidth)
@@ -99,7 +100,7 @@ int FileTableWidget::getCollumnWidth(int collumn)
         else
             registryKey="right_explorer/collumn_width_";
 
-            QSettings settings("qmmander_settings.ini", QSettings::IniFormat);
+            QSettings& settings = qmndr::Internals::instance().settings();
             return settings.value(QString("%1%2").arg(registryKey).arg(collumn), 75).toInt();
     }
     return 75;
@@ -360,8 +361,8 @@ void FileTableWidget::fillFileTable(const WinFileInfoPtrList& files, const WinFi
     // Icons über QFileIconProvider besorgen....
     QSharedPointer<QFileIconProvider> iconProvider(new QFileIconProvider);
 
-    TableItemPrototypes* tableItemPrototypes=MainWindow::getTableItemPrototypes();
-    FileTypeIcons*       fileTypeIcons=MainWindow::getFileTypeIcons();
+    TableItemPrototypes& tableItemPrototypes = qmndr::Internals::instance().tableItemPrototypes();
+    FileTypeIcons& fileTypeIcons = qmndr::Internals::instance().fileTypeIcons();
 
     quint64 insertCount=0;
 
@@ -389,20 +390,20 @@ void FileTableWidget::fillFileTable(const WinFileInfoPtrList& files, const WinFi
         // (before up to 8,5sec on an C2Q 6600 system).
         //
         QString fileTypeDescription=WinFileInfo::getFileTypeDescripton(*fi);
-        if(!tableItemPrototypes->contains(fileTypeDescription))
-            (*tableItemPrototypes)[fileTypeDescription]=QTableWidgetItem(fileTypeDescription);
+        if(!tableItemPrototypes.contains(fileTypeDescription))
+            tableItemPrototypes[fileTypeDescription]=QTableWidgetItem(fileTypeDescription);
 
-        if(!fileTypeIcons->contains(fileTypeDescription) && fi->isDir() && !fi->isSymLink())
-            (*fileTypeIcons)[fileTypeDescription]=iconProvider->icon(QFileIconProvider::Folder);
+        if(!fileTypeIcons.contains(fileTypeDescription) && fi->isDir() && !fi->isSymLink())
+            fileTypeIcons[fileTypeDescription]=iconProvider->icon(QFileIconProvider::Folder);
 
-        if(!fileTypeIcons->contains(fileTypeDescription) && !fi->isDir())
-            (*fileTypeIcons)[fileTypeDescription]=fi->getWinIcon();
+        if(!fileTypeIcons.contains(fileTypeDescription) && !fi->isDir())
+            fileTypeIcons[fileTypeDescription]=fi->getWinIcon();
 
         QString attributes=WinFileInfo::getAttributeString(*fi);
-        if(!tableItemPrototypes->contains(attributes))
+        if(!tableItemPrototypes.contains(attributes))
         {
-            (*tableItemPrototypes)[attributes]=QTableWidgetItem(attributes);
-            (*tableItemPrototypes)[attributes].setTextAlignment(Qt::AlignVCenter | Qt::AlignLeft);
+            tableItemPrototypes[attributes]=QTableWidgetItem(attributes);
+            tableItemPrototypes[attributes].setTextAlignment(Qt::AlignVCenter | Qt::AlignLeft);
         }
 
         // Under the first collumn of a row goes a user-defined QVariant which holds the
@@ -412,23 +413,23 @@ void FileTableWidget::fillFileTable(const WinFileInfoPtrList& files, const WinFi
         {
             if(fi->isSymLink())
             {
-                item=new QTableWidgetItem((*fileTypeIcons)["ICON_FOLDER_WITH_LINK16"], fi->fileName());
+                item=new QTableWidgetItem(fileTypeIcons["ICON_FOLDER_WITH_LINK16"], fi->fileName());
             }
             else
             {
                 if(fi->isArchiveFile())
-                    item=new QTableWidgetItem((*fileTypeIcons)[fileTypeDescription], fi->archiveFileName());
+                    item=new QTableWidgetItem(fileTypeIcons[fileTypeDescription], fi->archiveFileName());
                 else
-                    item=new QTableWidgetItem((*fileTypeIcons)[fileTypeDescription], fi->fileName());
+                    item=new QTableWidgetItem(fileTypeIcons[fileTypeDescription], fi->fileName());
             }
             item->setToolTip(tr("Creation date: ")+date);
         }
         else
         {
             if(fi->isArchiveFile())
-                item=new QTableWidgetItem((*fileTypeIcons)[fileTypeDescription], fi->archiveFileName());
+                item=new QTableWidgetItem(fileTypeIcons[fileTypeDescription], fi->archiveFileName());
             else
-                item=new QTableWidgetItem((*fileTypeIcons)[fileTypeDescription], fi->fileName());
+                item=new QTableWidgetItem(fileTypeIcons[fileTypeDescription], fi->fileName());
 
             fileTypeDescription=WinFileInfo::getFileTypeDescripton(*fi);
             item->setToolTip(tr("Type")+": "+fileTypeDescription+"\n"+
@@ -440,11 +441,11 @@ void FileTableWidget::fillFileTable(const WinFileInfoPtrList& files, const WinFi
 
         if(!fi->isDir())
         {
-            item=(*tableItemPrototypes)["__EMPTY_ITEM_RA__"].clone();
+            item=tableItemPrototypes["__EMPTY_ITEM_RA__"].clone();
             item->setText(fileSize);
         }
         else
-            item=(*tableItemPrototypes)["__EMPTY_ITEM_RA__"].clone();
+            item=tableItemPrototypes["__EMPTY_ITEM_RA__"].clone();
 
         setItem(insertCount, 1, item);                                               // Col 2
 
@@ -457,12 +458,12 @@ void FileTableWidget::fillFileTable(const WinFileInfoPtrList& files, const WinFi
             setItem(insertCount, 2, new QTableWidgetItem(""));
         }
 
-        setItem(insertCount, 3, (*tableItemPrototypes)[fileTypeDescription].clone());    // Col 4
+        setItem(insertCount, 3, tableItemPrototypes[fileTypeDescription].clone());    // Col 4
 
         if(attributes=="")
-            item=(*tableItemPrototypes)["__EMPTY_ITEM_LA__"].clone();
+            item=tableItemPrototypes["__EMPTY_ITEM_LA__"].clone();
         else
-            item=(*tableItemPrototypes)[attributes].clone();
+            item=tableItemPrototypes[attributes].clone();
         setItem(insertCount, 4, item);               // Col 5
 
         insertCount++;
